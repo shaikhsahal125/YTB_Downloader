@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontPageController">
+<AnchorPane prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontPageController">
    <children>
       <Text fill="#e81010" fontSmoothingType="LCD" layoutX="163.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER">
          <font>
@@ -21,16 +21,21 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField layoutX="39.0" layoutY="173.0" prefHeight="27.0" prefWidth="518.0" promptText="Enter / paste exact link here" />
-      <RadioButton layoutX="192.0" layoutY="225.0" mnemonicParsing="false" selected="true" text="Audio Only">
+      <TextField fx:id="inputTextField" layoutX="39.0" layoutY="173.0" prefHeight="27.0" prefWidth="518.0" promptText="Enter / paste exact link here" />
+      <RadioButton fx:id="audioRBtn" layoutX="192.0" layoutY="225.0" mnemonicParsing="false" selected="true" text="Audio Only">
          <toggleGroup>
             <ToggleGroup fx:id="typeGroup" />
          </toggleGroup></RadioButton>
-      <RadioButton layoutX="350.0" layoutY="225.0" mnemonicParsing="false" text="Video" toggleGroup="$typeGroup" />
-      <Button alignment="CENTER" layoutX="201.0" layoutY="290.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="194.0" text="Download" textAlignment="CENTER" textFill="#f50505">
+      <RadioButton fx:id="videoRBtn" layoutX="350.0" layoutY="225.0" mnemonicParsing="false" text="Video" toggleGroup="$typeGroup" />
+      <Button fx:id="downloadBtn" alignment="CENTER" layoutX="201.0" layoutY="290.0" mnemonicParsing="false" onAction="#download" prefHeight="57.0" prefWidth="194.0" text="Download" textAlignment="CENTER" textFill="#f50505">
          <font>
             <Font name="Arial Bold" size="30.0" />
          </font>
       </Button>
+      <Text fx:id="status" fill="#27c952" layoutX="201.0" layoutY="387.0" strokeType="OUTSIDE" strokeWidth="0.0">
+         <font>
+            <Font name="Arial Italic" size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
