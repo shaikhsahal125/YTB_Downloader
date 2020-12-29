@@ -35,9 +35,10 @@ public class FrontPageController {
     private boolean audioSelected;
     private boolean videoSelected;
     private String getInfoScript = "src/controller/pythonScripts/getInfo.py";
-    private Process p;
+    private String thumbnail;
 
-    public void download(ActionEvent event) throws IOException {
+
+    public void download(ActionEvent event) throws IOException, InterruptedException {
         inputUrl = inputTextField.getText().trim();
         audioSelected = audioRBtn.isSelected();
         videoSelected = videoRBtn.isSelected();
@@ -56,38 +57,32 @@ public class FrontPageController {
             return;
         }
 
-        System.out.println("Starting");
-//        try {
-//            ProcessBuilder processBuilder = new ProcessBuilder("python ", getInfoScript, inputUrl); // Arrays.asList("python ", getInfoScript+" ", inputUrl)
-//
-//            Process process = processBuilder.start();
-//
-//            System.out.println("ran it");
-//        } catch (Exception e) {
-//            System.out.println("in catch");
-//            e.printStackTrace();
-//        }
 
-        ProcessBuilder processBuilder = new ProcessBuilder("python3", getInfoScript, inputUrl);
-        processBuilder.redirectErrorStream(true);
-
+        ProcessBuilder processBuilder = new ProcessBuilder("python3", getInfoScript, inputUrl).redirectErrorStream(true);
         Process process = processBuilder.start();
 
         Reader reader = new InputStreamReader(process.getInputStream());
         BufferedReader bufferedReader = new BufferedReader(reader);
         StringBuilder stringBuilder = new StringBuilder();
+
         String s;
         while ((s = bufferedReader.readLine()) != null){
-            if(s.startsWith("Name") || s.startsWith("Views") || s.startsWith("Likes") || s.startsWith("Dislikes") || s.startsWith("Thumbnail")){
+            if (s.startsWith("Title") || s.startsWith("Views") || s.startsWith("Likes") || s.startsWith("Dislikes")) {
                 stringBuilder.append(s + "\n");
+            } else if (s.startsWith("Title")) {
+                thumbnail = s;
             }
         }
-        if (stringBuilder.toString().equals("")){
-            System.out.println("Errorrrrrrrr");
-        }
-        System.out.println(stringBuilder.toString());
+        process.waitFor();
+        System.out.println(process);
 
-        System.out.println("Ended");
+
+        if (stringBuilder.toString().equals("")){
+            System.out.println("Error occurred while fetching data");
+        } else {
+            System.out.println(stringBuilder.toString());
+        }
+
 
         if (audioSelected){
             System.out.println("audio selected");
