@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
 import javax.script.*;
 import java.io.*;
@@ -36,6 +38,8 @@ public class FrontPageController {
     private boolean videoSelected;
     private String getInfoScript = "src/controller/pythonScripts/getInfo.py";
     private String thumbnail;
+    private String type;
+    private String save_file_path;
 
 
     public void download(ActionEvent event) throws IOException, InterruptedException {
@@ -57,8 +61,23 @@ public class FrontPageController {
             return;
         }
 
+        if (audioSelected){
+            System.out.println("audio selected");
+            type = "audio";
+        } else if (videoSelected){
+            System.out.println("video selected");
+            type = "video";
+        } else {
+            System.out.println("something is really wrong");
+            return;
+        }
 
-        ProcessBuilder processBuilder = new ProcessBuilder("python3", getInfoScript, inputUrl).redirectErrorStream(true);
+        DirectoryChooser selectDestination = new DirectoryChooser();
+        selectDestination.setTitle("Select your destination");
+        save_file_path =  selectDestination.showDialog(downloadBtn.getScene().getWindow()).getPath();
+
+
+        ProcessBuilder processBuilder = new ProcessBuilder("python3", getInfoScript, inputUrl, type, save_file_path).redirectErrorStream(true);
         Process process = processBuilder.start();
 
         Reader reader = new InputStreamReader(process.getInputStream());
@@ -83,14 +102,6 @@ public class FrontPageController {
             System.out.println(stringBuilder.toString());
         }
 
-
-        if (audioSelected){
-            System.out.println("audio selected");
-        } else if (videoSelected){
-            System.out.println("video selected");
-        } else {
-            System.out.println("something is really wrong");
-        }
 
         System.out.println("downloading...");
     }
