@@ -2,9 +2,11 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.Group;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -31,7 +33,10 @@ public class FrontPageController {
     Button downloadBtn;
 
     @FXML
-    Text status;
+    Text statusText;
+
+    @FXML
+    ProgressIndicator loader;
 
     private String inputUrl;
     private boolean audioSelected;
@@ -43,23 +48,30 @@ public class FrontPageController {
 
 
     public void download(ActionEvent event) throws IOException, InterruptedException {
+
+        statusText.setText("Processing...\nPlease wait, it may take a while" );
+        statusText.setFill(Color.GREEN);
+        loader.setVisible(true);
+
         inputUrl = inputTextField.getText().trim();
         audioSelected = audioRBtn.isSelected();
         videoSelected = videoRBtn.isSelected();
 
         if (inputUrl.equals("")){
-            // TODO make alert box
-            System.out.println("you must type the url");
+
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error!");
+            error.setHeaderText("You did not enter any URL.");
+            error.setContentText("Please enter a URL and try again.");
+
+            statusText.setText("You must have to enter a URL");
+            statusText.setFill(Color.INDIANRED);
+
+            error.showAndWait();
+            loader.setVisible(false);
             return;
         }
 
-        File f = new File(getInfoScript);
-        if (f.exists()){
-            System.out.println("good");
-        } else {
-            System.out.println("not good");
-            return;
-        }
 
         if (audioSelected){
             System.out.println("audio selected");
@@ -69,13 +81,26 @@ public class FrontPageController {
             type = "video";
         } else {
             System.out.println("something is really wrong");
+            loader.setVisible(false);
             return;
         }
 
         DirectoryChooser selectDestination = new DirectoryChooser();
         selectDestination.setTitle("Select your destination");
-        save_file_path =  selectDestination.showDialog(downloadBtn.getScene().getWindow()).getPath();
+        File dirPath = selectDestination.showDialog(downloadBtn.getScene().getWindow());
 
+        if (dirPath == null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("File selection ERROR!");
+            error.setHeaderText("Make sure you select your destination folder");
+            statusText.setText("You must select a save Destination");
+            statusText.setFill(Color.RED);
+            error.showAndWait();
+            loader.setVisible(false);
+            return;
+        } else {
+            save_file_path = dirPath.getPath();
+        }
 
         ProcessBuilder processBuilder = new ProcessBuilder("python3", getInfoScript, inputUrl, type, save_file_path).redirectErrorStream(true);
         Process process = processBuilder.start();
@@ -88,8 +113,6 @@ public class FrontPageController {
         while ((s = bufferedReader.readLine()) != null){
             if (s.startsWith("Title") || s.startsWith("Views") || s.startsWith("Likes") || s.startsWith("Dislikes")) {
                 stringBuilder.append(s + "\n");
-            } else if (s.startsWith("Title")) {
-                thumbnail = s;
             }
         }
         process.waitFor();
@@ -98,11 +121,29 @@ public class FrontPageController {
 
         if (stringBuilder.toString().equals("")){
             System.out.println("Error occurred while fetching data");
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Downloading error!");
+            error.setHeaderText("Not able to download this content");
+            error.setContentText("Please use other URLs or try again later");
+            error.showAndWait();
+            loader.setVisible(false);
+            return;
         } else {
+            statusText.setText("Almost Done..");
+            statusText.setFill(Color.GREEN);
             System.out.println(stringBuilder.toString());
+            Alert success = new Alert(Alert.AlertType.INFORMATION);
+            success.setTitle("Successfully Downloaded");
+            success.setHeaderText("Your content information is below");
+            success.setContentText(stringBuilder.toString() + "\nDestination: " + save_file_path);
+            success.showAndWait();
         }
 
 
-        System.out.println("downloading...");
+        loader.setVisible(false);
+        System.out.println("downloaded...");
+        statusText.setFill(Color.GREEN);
+        statusText.setText("Successfully downloaded\nPlease enter other URL if you want to download more content");
+
     }
 }

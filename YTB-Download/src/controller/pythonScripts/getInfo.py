@@ -17,7 +17,7 @@ print(f"Title: {yt.title}")
 print(f'Views: {yt.views}')
 print(f'Likes: {yt.likes}')
 print(f'Dislikes: {yt.dislikes}')
-print(f'Thumbnail: {yt.thumbnail}')
+
 
 # path = input("Enter path: ")
 # yt.formats.first().download(path = path)

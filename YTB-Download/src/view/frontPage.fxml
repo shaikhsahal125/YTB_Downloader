@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="413.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontPageController">
+<AnchorPane prefHeight="437.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontPageController">
    <children>
       <Text fill="#e81010" fontSmoothingType="LCD" layoutX="163.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" textAlignment="CENTER">
          <font>
@@ -32,9 +32,10 @@
             <Font name="Arial Bold" size="30.0" />
          </font>
       </Button>
-      <Text fx:id="status" fill="#27c952" layoutX="201.0" layoutY="387.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <ProgressIndicator fx:id="loader" layoutX="146.0" layoutY="362.0" prefHeight="38.0" prefWidth="35.0" visible="false" />
+      <Text fx:id="statusText" layoutX="193.0" layoutY="387.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="370.0">
          <font>
-            <Font name="Arial Italic" size="18.0" />
+            <Font size="18.0" />
          </font>
       </Text>
    </children>
