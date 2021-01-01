@@ -1,6 +1,5 @@
 package app;
 
-import controller.FrontPageController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

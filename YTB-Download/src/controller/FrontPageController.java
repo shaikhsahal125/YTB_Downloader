@@ -2,21 +2,13 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 
-import javax.script.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
+
 
 
 public class FrontPageController {
@@ -69,6 +61,7 @@ public class FrontPageController {
 
             error.showAndWait();
             loader.setVisible(false);
+            inputTextField.clear();
             return;
         }
 
@@ -82,6 +75,7 @@ public class FrontPageController {
         } else {
             System.out.println("something is really wrong");
             loader.setVisible(false);
+            inputTextField.clear();
             return;
         }
 
@@ -96,6 +90,7 @@ public class FrontPageController {
             statusText.setText("You must select a save Destination");
             statusText.setFill(Color.RED);
             error.showAndWait();
+            inputTextField.clear();
             loader.setVisible(false);
             return;
         } else {
@@ -125,7 +120,10 @@ public class FrontPageController {
             error.setTitle("Downloading error!");
             error.setHeaderText("Not able to download this content");
             error.setContentText("Please use other URLs or try again later");
+            statusText.setText("Error occurred while downloading\nPlease try other URL or try again later");
+            statusText.setFill(Color.RED);
             error.showAndWait();
+            inputTextField.clear();
             loader.setVisible(false);
             return;
         } else {
@@ -139,7 +137,7 @@ public class FrontPageController {
             success.showAndWait();
         }
 
-
+        inputTextField.clear();
         loader.setVisible(false);
         System.out.println("downloaded...");
         statusText.setFill(Color.GREEN);
