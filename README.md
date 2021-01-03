@@ -1,4 +1,4 @@
-# YTB_Downloader (You Tube Downloader)
+# YTB_Downloader (YouTube Downloader)
 
 It's a desktop application buil using mixture of JavaFx and Python3. 
 
